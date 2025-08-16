@@ -1,0 +1,24 @@
+# configs/config.yaml
+
+# Device configuration
+device: 'cuda'
+
+# Dataset and DataLoader parameters
+data_dir: './data'
+img_size: 224
+batch_size: 64
+num_workers: 4
+
+# Model parameters
+model_name: 'vit_tiny_patch16_224'
+num_classes: 10
+pretrained: true
+
+# Training parameters
+num_epochs: 10
+learning_rate: 0.0001
+weight_decay: 0.00001
+mixed_precision: true
+
+# Output and logging
+checkpoint_dir: './checkpoints'

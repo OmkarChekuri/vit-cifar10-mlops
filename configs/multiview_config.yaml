@@ -1,0 +1,27 @@
+# configs/multiview_config.yaml
+
+# Device configuration
+device: 'cuda'
+
+# Dataset and DataLoader parameters
+data_dir: './data'
+img_size: 224
+batch_size: 1 # Crucial for limited VRAM
+num_workers: 0 # Set to 0 for dummy data
+
+# Model parameters
+model_name_for_vit: 'vit_tiny_patch16_224'
+num_views: 4
+num_classes: 1 # Binary classification
+pretrained: true
+use_adapters: true
+bottleneck_ratio: 32
+
+# Training parameters
+num_epochs: 3
+learning_rate: 0.0005
+warmup_epochs: 1
+num_folds: 3
+
+# Output and logging
+checkpoint_dir: './checkpoints_multiview'
