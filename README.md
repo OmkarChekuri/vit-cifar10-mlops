@@ -68,14 +68,14 @@ You can run each training script from the command line, referencing its respecti
 python src/train_cifar10.py
 ```
 
-###For Multi-View Classification with Adapters:
+### For Multi-View Classification with Adapters:
 
 ```bash
 python src/train_multiview.py
 ```
 
 
-# Build the Docker image
+### Build the Docker image
 ```bash
 docker build -t vit-mlops-project:latest .
 ```
@@ -86,13 +86,13 @@ Understanding num_workers and Shared Memory
 
 Your scripts are configured to use multiple num_workers for the data loader. This helps speed up training by loading data in parallel using your CPU while the GPU is busy with computations. However, these workers require a dedicated amount of shared memory (/dev/shm) to communicate. Docker's default shared memory size is often too small for this, leading to an OverflowError. By adding --shm-size=2g to the docker run command, you allocate a sufficient amount of memory to prevent this error and ensure the data loading remains fast.
 
-# Run the CIFAR-10 training script inside the container with GPU support
+### Run the CIFAR-10 training script inside the container with GPU support
 ```bash
 # We add `--shm-size=2g` to allocate enough shared memory for data loading.
 docker run --gpus all --shm-size=2g --name vit-cifar10-trainer vit-mlops-project:latest python3.10 src/train_cifar10.py
 
 ```
-# Run the multi-view training script inside the container with GPU support
+### Run the multi-view training script inside the container with GPU support
 ```bash
 docker run --gpus all --shm-size=2g --name vit-cifar10-trainer vit-mlops-project:latest python3.10 src/train_multiview.py
 ```
