@@ -73,3 +73,17 @@ python src/train_cifar10.py
 ```bash
 python src/train_multiview.py
 ```
+
+
+# Build the Docker image
+```bash
+docker build -t vit-mlops-project:latest .
+```
+# Run the CIFAR-10 training script inside the container with GPU support
+```bash
+docker run --gpus all vit-mlops-project:latest python3.10 src/train_cifar10.py
+```
+# Run the multi-view training script inside the container with GPU support
+```bash
+docker run --gpus all vit-mlops-project:latest python3.10 src/train_multiview.py
+```
