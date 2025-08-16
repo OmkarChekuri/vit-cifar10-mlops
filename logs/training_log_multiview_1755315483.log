@@ -1,0 +1,34 @@
+2025-08-15 22:38:04,676 - INFO - Model: vit_tiny_patch16_224
+2025-08-15 22:38:04,677 - INFO - Total parameters: 6,079,289
+2025-08-15 22:38:04,677 - INFO - Trainable parameters (with adapters): 361,873
+2025-08-15 22:38:04,677 - INFO - Percentage trainable: 5.95%
+2025-08-15 22:38:04,679 - INFO - 
+--- Starting Training for Fold 1 ---
+2025-08-15 22:38:21,733 - INFO - Fold 1, Epoch 1/3 | Train Loss: 0.8642 | Train Acc: 51.25% | Val Acc: 65.00%
+2025-08-15 22:38:38,529 - INFO - Fold 1, Epoch 2/3 | Train Loss: 0.7238 | Train Acc: 42.50% | Val Acc: 55.00%
+2025-08-15 22:38:54,575 - INFO - Fold 1, Epoch 3/3 | Train Loss: 0.6951 | Train Acc: 51.25% | Val Acc: 65.00%
+2025-08-15 22:38:54,576 - INFO - --- Fold 1 Finished. Best Val Acc: 65.00% ---
+
+2025-08-15 22:38:54,950 - INFO - 
+--- Starting Training for Fold 2 ---
+2025-08-15 22:39:10,875 - INFO - Fold 2, Epoch 1/3 | Train Loss: 0.7871 | Train Acc: 55.00% | Val Acc: 55.00%
+2025-08-15 22:39:27,525 - INFO - Fold 2, Epoch 2/3 | Train Loss: 0.7013 | Train Acc: 50.00% | Val Acc: 50.00%
+2025-08-15 22:39:43,535 - INFO - Fold 2, Epoch 3/3 | Train Loss: 0.7002 | Train Acc: 53.75% | Val Acc: 25.00%
+2025-08-15 22:39:43,536 - INFO - --- Fold 2 Finished. Best Val Acc: 55.00% ---
+
+2025-08-15 22:39:43,933 - INFO - 
+--- Starting Training for Fold 3 ---
+2025-08-15 22:39:59,647 - INFO - Fold 3, Epoch 1/3 | Train Loss: 0.7930 | Train Acc: 42.50% | Val Acc: 40.00%
+2025-08-15 22:40:16,341 - INFO - Fold 3, Epoch 2/3 | Train Loss: 0.7226 | Train Acc: 50.00% | Val Acc: 45.00%
+2025-08-15 22:40:33,566 - INFO - Fold 3, Epoch 3/3 | Train Loss: 0.6894 | Train Acc: 56.25% | Val Acc: 45.00%
+2025-08-15 22:40:33,567 - INFO - --- Fold 3 Finished. Best Val Acc: 45.00% ---
+
+2025-08-15 22:40:33,569 - INFO - 
+--- Summary of Classification Accuracy (ACC) ---
+2025-08-15 22:40:33,598 - INFO - +----------------------+---------------------+-------------+---------------------+----------+----------+----------+----------------------+
+| Model                | Finetuning Method   |   Param (M) |   Tunable Param (M) |   Fold 1 |   Fold 2 |   Fold 3 | Mean ACC (%) ± STD   |
++======================+=====================+=============+=====================+==========+==========+==========+======================+
+| vit_tiny_patch16_224 | Adapter             |         6.1 |               0.362 |       65 |       55 |       45 | 55.0 ± 8.2           |
++----------------------+---------------------+-------------+---------------------+----------+----------+----------+----------------------+
+2025-08-15 22:40:33,600 - INFO - 
+--- Project Complete ---

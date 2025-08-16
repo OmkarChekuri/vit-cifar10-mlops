@@ -1,0 +1,62 @@
+2025-08-15 21:51:28,534 - INFO - Using device: cuda
+2025-08-15 21:51:28,535 - INFO - 
+--- Data Loading and Preprocessing ---
+2025-08-15 21:51:33,461 - INFO - Training samples: 40000
+2025-08-15 21:51:33,462 - INFO - Validation samples: 10000
+2025-08-15 21:51:33,462 - INFO - Test samples: 10000
+2025-08-15 21:51:33,462 - INFO - Number of batches per epoch (train): 625
+2025-08-15 21:51:33,463 - INFO - 
+--- Model Architecture ---
+2025-08-15 21:51:34,830 - INFO - Model: vit_tiny_patch16_224
+2025-08-15 21:51:34,830 - INFO - Total parameters: 5,526,346
+2025-08-15 21:51:34,830 - INFO - Trainable parameters: 5,526,346
+2025-08-15 21:51:34,831 - INFO - Percentage trainable: 100.00%
+2025-08-15 21:51:34,831 - INFO - 
+--- Training Loop ---
+2025-08-15 21:56:43,330 - INFO - Epoch 1/10 | Duration: 308.39s
+2025-08-15 21:56:43,349 - INFO - Train Loss: 0.7038 | Train Acc: 75.44%
+2025-08-15 21:56:43,349 - INFO - Val Loss: 0.4682 | Val Acc: 83.77%
+2025-08-15 21:56:43,702 - INFO - Saved best model checkpoint with Val Acc: 83.77%
+2025-08-15 22:00:43,427 - INFO - Epoch 2/10 | Duration: 239.72s
+2025-08-15 22:00:43,427 - INFO - Train Loss: 0.4601 | Train Acc: 84.09%
+2025-08-15 22:00:43,428 - INFO - Val Loss: 0.4596 | Val Acc: 84.13%
+2025-08-15 22:00:43,561 - INFO - Saved best model checkpoint with Val Acc: 84.13%
+2025-08-15 22:04:22,464 - INFO - Epoch 3/10 | Duration: 218.90s
+2025-08-15 22:04:22,464 - INFO - Train Loss: 0.4044 | Train Acc: 86.06%
+2025-08-15 22:04:22,464 - INFO - Val Loss: 0.4000 | Val Acc: 86.09%
+2025-08-15 22:04:22,544 - INFO - Saved best model checkpoint with Val Acc: 86.09%
+2025-08-15 22:07:48,429 - INFO - Epoch 4/10 | Duration: 205.88s
+2025-08-15 22:07:48,429 - INFO - Train Loss: 0.3613 | Train Acc: 87.51%
+2025-08-15 22:07:48,429 - INFO - Val Loss: 0.4045 | Val Acc: 86.20%
+2025-08-15 22:07:48,510 - INFO - Saved best model checkpoint with Val Acc: 86.20%
+2025-08-15 22:11:19,918 - INFO - Epoch 5/10 | Duration: 211.41s
+2025-08-15 22:11:19,919 - INFO - Train Loss: 0.3323 | Train Acc: 88.37%
+2025-08-15 22:11:19,919 - INFO - Val Loss: 0.3857 | Val Acc: 86.91%
+2025-08-15 22:11:20,000 - INFO - Saved best model checkpoint with Val Acc: 86.91%
+2025-08-15 22:14:50,541 - INFO - Epoch 6/10 | Duration: 210.54s
+2025-08-15 22:14:50,541 - INFO - Train Loss: 0.2967 | Train Acc: 89.68%
+2025-08-15 22:14:50,541 - INFO - Val Loss: 0.3358 | Val Acc: 88.60%
+2025-08-15 22:14:50,616 - INFO - Saved best model checkpoint with Val Acc: 88.60%
+2025-08-15 22:18:18,563 - INFO - Epoch 7/10 | Duration: 207.95s
+2025-08-15 22:18:18,563 - INFO - Train Loss: 0.2695 | Train Acc: 90.68%
+2025-08-15 22:18:18,563 - INFO - Val Loss: 0.3180 | Val Acc: 88.90%
+2025-08-15 22:18:18,905 - INFO - Saved best model checkpoint with Val Acc: 88.90%
+2025-08-15 22:21:49,088 - INFO - Epoch 8/10 | Duration: 210.18s
+2025-08-15 22:21:49,088 - INFO - Train Loss: 0.2470 | Train Acc: 91.50%
+2025-08-15 22:21:49,089 - INFO - Val Loss: 0.3104 | Val Acc: 89.41%
+2025-08-15 22:21:49,185 - INFO - Saved best model checkpoint with Val Acc: 89.41%
+2025-08-15 22:25:16,252 - INFO - Epoch 9/10 | Duration: 207.07s
+2025-08-15 22:25:16,253 - INFO - Train Loss: 0.2317 | Train Acc: 92.00%
+2025-08-15 22:25:16,254 - INFO - Val Loss: 0.3034 | Val Acc: 89.58%
+2025-08-15 22:25:16,345 - INFO - Saved best model checkpoint with Val Acc: 89.58%
+2025-08-15 22:28:42,657 - INFO - Epoch 10/10 | Duration: 206.31s
+2025-08-15 22:28:42,657 - INFO - Train Loss: 0.2243 | Train Acc: 92.12%
+2025-08-15 22:28:42,657 - INFO - Val Loss: 0.2873 | Val Acc: 90.13%
+2025-08-15 22:28:42,748 - INFO - Saved best model checkpoint with Val Acc: 90.13%
+2025-08-15 22:28:42,749 - INFO - 
+Training finished!
+2025-08-15 22:28:42,749 - INFO - Best Validation Accuracy: 90.13%
+2025-08-15 22:28:42,761 - INFO - Loaded best model weights for final evaluation.
+2025-08-15 22:28:42,768 - INFO - 
+--- Final Evaluation ---
+2025-08-15 22:29:28,090 - INFO - Test Loss: 0.0781 | Test Accuracy: 97.59%

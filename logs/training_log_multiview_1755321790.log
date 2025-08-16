@@ -1,0 +1,37 @@
+2025-08-16 00:23:12,118 - INFO - Model: vit_tiny_patch16_224
+2025-08-16 00:23:12,119 - INFO - Total parameters: 6,079,289
+2025-08-16 00:23:12,120 - INFO - Trainable parameters (with adapters): 361,873
+2025-08-16 00:23:12,120 - INFO - Percentage trainable: 5.95%
+2025-08-16 00:23:12,123 - INFO - 
+--- Starting Training for Fold 1 ---
+2025-08-16 00:23:34,902 - INFO - Fold 1, Epoch 1/3 | Train Loss: 0.8018 | Train Acc: 45.00% | Val Acc: 60.00%
+2025-08-16 00:23:51,152 - INFO - Fold 1, Epoch 2/3 | Train Loss: 0.7051 | Train Acc: 51.25% | Val Acc: 55.00%
+2025-08-16 00:24:07,076 - INFO - Fold 1, Epoch 3/3 | Train Loss: 0.7056 | Train Acc: 43.75% | Val Acc: 40.00%
+2025-08-16 00:24:07,076 - INFO - --- Fold 1 Finished. Best Val Acc: 60.00% ---
+
+2025-08-16 00:24:07,500 - INFO - 
+--- Starting Training for Fold 2 ---
+2025-08-16 00:24:23,496 - INFO - Fold 2, Epoch 1/3 | Train Loss: 0.8683 | Train Acc: 50.00% | Val Acc: 50.00%
+2025-08-16 00:24:42,293 - INFO - Fold 2, Epoch 2/3 | Train Loss: 0.7145 | Train Acc: 46.25% | Val Acc: 65.00%
+2025-08-16 00:24:59,806 - INFO - Fold 2, Epoch 3/3 | Train Loss: 0.6877 | Train Acc: 58.75% | Val Acc: 60.00%
+2025-08-16 00:24:59,807 - INFO - --- Fold 2 Finished. Best Val Acc: 65.00% ---
+
+2025-08-16 00:25:00,388 - INFO - 
+--- Starting Training for Fold 3 ---
+2025-08-16 00:25:17,780 - INFO - Fold 3, Epoch 1/3 | Train Loss: 0.7880 | Train Acc: 48.75% | Val Acc: 60.00%
+2025-08-16 00:25:35,924 - INFO - Fold 3, Epoch 2/3 | Train Loss: 0.6981 | Train Acc: 50.00% | Val Acc: 55.00%
+2025-08-16 00:25:53,445 - INFO - Fold 3, Epoch 3/3 | Train Loss: 0.7020 | Train Acc: 52.50% | Val Acc: 60.00%
+2025-08-16 00:25:53,445 - INFO - --- Fold 3 Finished. Best Val Acc: 60.00% ---
+
+2025-08-16 00:25:53,448 - INFO - 
+--- Epoch Metrics Log ---
+2025-08-16 00:25:53,449 - INFO - Metrics per fold: [[{'epoch': 1, 'train_loss': 0.8017999146133661, 'train_acc': 45.0, 'val_loss': 0.687383696436882, 'val_acc': 60.0}, {'epoch': 2, 'train_loss': 0.7051395747810603, 'train_acc': 51.24999999999999, 'val_loss': 0.6880769670009613, 'val_acc': 55.00000000000001}, {'epoch': 3, 'train_loss': 0.7055709950625897, 'train_acc': 43.75, 'val_loss': 0.7001931935548782, 'val_acc': 40.0}], [{'epoch': 1, 'train_loss': 0.868337694182992, 'train_acc': 50.0, 'val_loss': 0.6936113148927688, 'val_acc': 50.0}, {'epoch': 2, 'train_loss': 0.7145303521305323, 'train_acc': 46.25, 'val_loss': 0.674004727602005, 'val_acc': 65.0}, {'epoch': 3, 'train_loss': 0.6876641001552344, 'train_acc': 58.75, 'val_loss': 0.6738312542438507, 'val_acc': 60.0}], [{'epoch': 1, 'train_loss': 0.787956225615926, 'train_acc': 48.75, 'val_loss': 0.673162916302681, 'val_acc': 60.0}, {'epoch': 2, 'train_loss': 0.6981392167508602, 'train_acc': 50.0, 'val_loss': 0.6889968365430832, 'val_acc': 55.00000000000001}, {'epoch': 3, 'train_loss': 0.7019606210291386, 'train_acc': 52.5, 'val_loss': 0.6857840329408645, 'val_acc': 60.0}]]
+2025-08-16 00:25:53,449 - INFO - 
+--- Summary of Classification Accuracy (ACC) ---
+2025-08-16 00:25:53,495 - INFO - +----------------------+---------------------+-------------+---------------------+----------+----------+----------+----------------------+
+| Model                | Finetuning Method   |   Param (M) |   Tunable Param (M) |   Fold 1 |   Fold 2 |   Fold 3 | Mean ACC (%) ± STD   |
++======================+=====================+=============+=====================+==========+==========+==========+======================+
+| vit_tiny_patch16_224 | Adapter             |         6.1 |               0.362 |       60 |       65 |       60 | 61.7 ± 2.4           |
++----------------------+---------------------+-------------+---------------------+----------+----------+----------+----------------------+
+2025-08-16 00:25:53,496 - INFO - 
+--- Project Complete ---
