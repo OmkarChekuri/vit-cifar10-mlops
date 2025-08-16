@@ -7,7 +7,7 @@ device: 'cuda'
 data_dir: './data'
 img_size: 224
 batch_size: 64
-num_workers: 4
+num_workers: 0 # increase for faster data loading
 
 # Model parameters
 model_name: 'vit_tiny_patch16_224'
