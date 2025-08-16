@@ -18,4 +18,4 @@ COPY . .
 ENV PYTHONUNBUFFERED=1
 
 # Define the default command to run the CIFAR-10 training script
-CMD ["python3.10", "src/train.py"]
+CMD ["python3.10", "src/train_cifar10.py"]

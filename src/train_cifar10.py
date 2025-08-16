@@ -54,13 +54,16 @@ def get_data_loaders(config, logger):
     logger.info("\n--- Data Loading and Preprocessing ---") # New: Use logger instead of print
 
     # Define transformations
+# Define image transformations for training and validation/testing.
+# We'll remove ColorJitter for now to avoid the OverflowError.
     train_transforms = transforms.Compose([
         transforms.RandomResizedCrop(config['img_size']),
         transforms.RandomHorizontalFlip(),
-        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
+
+    
     val_transforms = transforms.Compose([
         transforms.Resize(config['img_size']),
         transforms.CenterCrop(config['img_size']),
