@@ -9,28 +9,23 @@ import os
 import time
 import copy
 import yaml
-import logging # New: Import the logging module
+import logging
 
 def setup_logging(log_file):
     """Sets up logging to both console and a file."""
-    # New: Create a logger instance
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
 
-    # New: Create a file handler to save logs to a file
     file_handler = logging.FileHandler(log_file)
     file_handler.setLevel(logging.INFO)
 
-    # New: Create a console handler to print logs to the terminal
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.INFO)
 
-    # New: Define the log message format
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     file_handler.setFormatter(formatter)
     console_handler.setFormatter(formatter)
 
-    # New: Add handlers to the logger
     logger.addHandler(file_handler)
     logger.addHandler(console_handler)
 
@@ -45,22 +40,23 @@ def load_config(config_path):
 def setup_environment(config, logger):
     """Sets up device and output directories."""
     device = torch.device(config['device'] if torch.cuda.is_available() else 'cpu')
-    logger.info(f"Using device: {device}") # New: Use logger instead of print
+    logger.info(f"Using device: {device}")
     os.makedirs(config['checkpoint_dir'], exist_ok=True)
     return device
 
 def get_data_loaders(config, logger):
     """Downloads, transforms, and creates data loaders for CIFAR-10."""
-    logger.info("\n--- Data Loading and Preprocessing ---") # New: Use logger instead of print
+    logger.info("\n--- Data Loading and Preprocessing ---")
 
-    # Define transformations
+    # Define image transformations for training and validation/testing.
+    # We'll remove ColorJitter for now to avoid the OverflowError.
     train_transforms = transforms.Compose([
         transforms.RandomResizedCrop(config['img_size']),
         transforms.RandomHorizontalFlip(),
-        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
+    
     val_transforms = transforms.Compose([
         transforms.Resize(config['img_size']),
         transforms.CenterCrop(config['img_size']),
@@ -82,31 +78,31 @@ def get_data_loaders(config, logger):
     val_loader = DataLoader(val_subset, batch_size=config['batch_size'], shuffle=False, num_workers=config['num_workers'], pin_memory=True)
     test_loader = DataLoader(test_dataset, batch_size=config['batch_size'], shuffle=False, num_workers=config['num_workers'], pin_memory=True)
 
-    logger.info(f"Training samples: {len(train_subset)}") # New: Use logger
-    logger.info(f"Validation samples: {len(val_subset)}") # New: Use logger
-    logger.info(f"Test samples: {len(test_dataset)}") # New: Use logger
-    logger.info(f"Number of batches per epoch (train): {len(train_loader)}") # New: Use logger
+    logger.info(f"Training samples: {len(train_subset)}")
+    logger.info(f"Validation samples: {len(val_subset)}")
+    logger.info(f"Test samples: {len(test_dataset)}")
+    logger.info(f"Number of batches per epoch (train): {len(train_loader)}")
 
     return train_loader, val_loader, test_loader, train_subset, val_subset, test_dataset
 
 def get_model(config, device, logger):
     """Loads and configures the Vision Transformer model."""
-    logger.info("\n--- Model Architecture ---") # New: Use logger
+    logger.info("\n--- Model Architecture ---")
     model = timm.create_model(config['model_name'], pretrained=config['pretrained'], num_classes=config['num_classes'])
     model.to(device)
 
     total_params = sum(p.numel() for p in model.parameters())
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    logger.info(f"Model: {config['model_name']}") # New: Use logger
-    logger.info(f"Total parameters: {total_params:,}") # New: Use logger
-    logger.info(f"Trainable parameters: {trainable_params:,}") # New: Use logger
-    logger.info(f"Percentage trainable: {trainable_params / total_params * 100:.2f}%") # New: Use logger
+    logger.info(f"Model: {config['model_name']}")
+    logger.info(f"Total parameters: {total_params:,}")
+    logger.info(f"Trainable parameters: {trainable_params:,}")
+    logger.info(f"Percentage trainable: {trainable_params / total_params * 100:.2f}%")
 
     return model
 
 def train_model(model, train_loader, val_loader, train_subset, val_subset, device, config, logger):
     """Runs the training and validation loop."""
-    logger.info("\n--- Training Loop ---") # New: Use logger
+    logger.info("\n--- Training Loop ---")
     
     optimizer = optim.AdamW(model.parameters(), lr=config['learning_rate'], weight_decay=config['weight_decay'])
     criterion = nn.CrossEntropyLoss()
@@ -114,6 +110,9 @@ def train_model(model, train_loader, val_loader, train_subset, val_subset, devic
     
     best_val_accuracy = 0.0
     best_model_wts = copy.deepcopy(model.state_dict())
+    
+    # New: List to store epoch-wise metrics for plotting
+    epoch_metrics = []
 
     for epoch in range(config['num_epochs']):
         start_time = time.time()
@@ -166,25 +165,39 @@ def train_model(model, train_loader, val_loader, train_subset, val_subset, devic
         scheduler.step()
         
         epoch_duration = time.time() - start_time
-        logger.info(f"Epoch {epoch+1}/{config['num_epochs']} | Duration: {epoch_duration:.2f}s") # New: Use logger
-        logger.info(f"Train Loss: {epoch_train_loss:.4f} | Train Acc: {epoch_train_accuracy:.2f}%") # New: Use logger
-        logger.info(f"Val Loss: {epoch_val_loss:.4f} | Val Acc: {epoch_val_accuracy:.2f}%") # New: Use logger
+        logger.info(f"Epoch {epoch+1}/{config['num_epochs']} | Duration: {epoch_duration:.2f}s")
+        logger.info(f"Train Loss: {epoch_train_loss:.4f} | Train Acc: {epoch_train_accuracy:.2f}%")
+        logger.info(f"Val Loss: {epoch_val_loss:.4f} | Val Acc: {epoch_val_accuracy:.2f}%")
+        
+        # New: Store metrics for this epoch
+        epoch_metrics.append({
+            'epoch': epoch + 1,
+            'train_loss': epoch_train_loss,
+            'train_acc': epoch_train_accuracy,
+            'val_loss': epoch_val_loss,
+            'val_acc': epoch_val_accuracy
+        })
 
         if epoch_val_accuracy > best_val_accuracy:
             best_val_accuracy = epoch_val_accuracy
             best_model_wts = copy.deepcopy(model.state_dict())
             torch.save(model.state_dict(), os.path.join(config['checkpoint_dir'], f'best_model_epoch_{epoch+1}.pth'))
-            logger.info(f"Saved best model checkpoint with Val Acc: {best_val_accuracy:.2f}%") # New: Use logger
+            logger.info(f"Saved best model checkpoint with Val Acc: {best_val_accuracy:.2f}%")
             
-    logger.info("\nTraining finished!") # New: Use logger
-    logger.info(f"Best Validation Accuracy: {best_val_accuracy:.2f}%") # New: Use logger
+    logger.info("\nTraining finished!")
+    logger.info(f"Best Validation Accuracy: {best_val_accuracy:.2f}%")
+    
+    # New: Log the list of metrics
+    logger.info(f"\n--- Epoch Metrics Log ---")
+    logger.info(str(epoch_metrics))
+    
     model.load_state_dict(best_model_wts)
-    logger.info("Loaded best model weights for final evaluation.") # New: Use logger
+    logger.info("Loaded best model weights for final evaluation.")
     return model
 
 def evaluate_model(model, test_loader, test_dataset, device, config, logger):
     """Evaluates the model on the test set."""
-    logger.info("\n--- Final Evaluation ---") # New: Use logger
+    logger.info("\n--- Final Evaluation ---")
     model.eval()
     running_test_loss = 0.0
     correct_test_predictions = 0
@@ -205,13 +218,15 @@ def evaluate_model(model, test_loader, test_dataset, device, config, logger):
     test_loss = running_test_loss / len(test_dataset)
     test_accuracy = correct_test_predictions / total_test_samples * 100
     
-    logger.info(f"Test Loss: {test_loss:.4f} | Test Accuracy: {test_accuracy:.2f}%") # New: Use logger
+    logger.info(f"Test Loss: {test_loss:.4f} | Test Accuracy: {test_accuracy:.2f}%")
 
 if __name__ == "__main__":
     # Load configuration
     config = load_config('configs/config.yaml')
     
     # New: Setup logging before anything else
+    if not os.path.exists('logs'):
+        os.makedirs('logs')
     log_file_name = f"training_log_{int(time.time())}.log"
     logger = setup_logging(os.path.join('logs', log_file_name))
     

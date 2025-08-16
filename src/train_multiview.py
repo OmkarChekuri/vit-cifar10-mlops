@@ -178,6 +178,9 @@ def train_and_evaluate_fold(fold_idx, model, optimizer, criterion, scheduler, tr
     logger.info(f"\n--- Starting Training for Fold {fold_idx + 1} ---")
     best_val_accuracy = 0.0
     best_model_wts = copy.deepcopy(model.state_dict())
+    
+    # New: List to store epoch-wise metrics for plotting
+    fold_metrics = []
 
     for epoch in range(num_epochs):
         model.train()
@@ -228,38 +231,44 @@ def train_and_evaluate_fold(fold_idx, model, optimizer, criterion, scheduler, tr
         epoch_val_accuracy = correct_val_predictions / total_val_samples * 100
 
         logger.info(f"Fold {fold_idx+1}, Epoch {epoch+1}/{num_epochs} | Train Loss: {avg_loss:.4f} | Train Acc: {accuracy:.2f}% | Val Acc: {epoch_val_accuracy:.2f}%")
+        
+        # New: Store metrics for this epoch
+        fold_metrics.append({
+            'epoch': epoch + 1,
+            'train_loss': avg_loss,
+            'train_acc': accuracy,
+            'val_loss': epoch_val_loss,
+            'val_acc': epoch_val_accuracy
+        })
 
         if epoch_val_accuracy > best_val_accuracy:
             best_val_accuracy = epoch_val_accuracy
             best_model_wts = copy.deepcopy(model.state_dict())
             
-            # Create checkpoint directory if it doesn't exist
             if not os.path.exists(checkpoint_dir):
                 os.makedirs(checkpoint_dir)
             
-            # Use os.path.join for platform-independent paths
             torch.save(model.state_dict(), os.path.join(checkpoint_dir, f'best_model_fold_{fold_idx+1}.pth'))
     
     logger.info(f"--- Fold {fold_idx + 1} Finished. Best Val Acc: {best_val_accuracy:.2f}% ---\n")
-    return best_val_accuracy
+    return best_val_accuracy, fold_metrics # Return both accuracy and metrics
 
 # --- Main Execution ---
 if __name__ == "__main__":
     # Load configuration
     config = load_config('configs/multiview_config.yaml')
     
-    # New: Setup logging before anything else
     if not os.path.exists('logs'):
         os.makedirs('logs')
     log_file_name = f"training_log_multiview_{int(time.time())}.log"
     logger = setup_logging(os.path.join('logs', log_file_name))
     
-    # Store results for the final table
     results_data = []
+    # New: List to store all epoch metrics from all folds
+    all_fold_metrics = []
 
     # Loop for conceptual K-fold cross-validation
     for fold_idx in range(config['num_folds']):
-        # Re-initialize model for each fold to ensure fresh weights
         model = MultiInputClassifier(
             num_views=config['num_views'],
             num_classes=config['num_classes'],
@@ -268,7 +277,6 @@ if __name__ == "__main__":
             bottleneck_ratio=config['bottleneck_ratio']
         ).to(config['device'])
 
-        # Print model parameters for the first fold
         if fold_idx == 0:
             total_params = sum(p.numel() for p in model.parameters())
             trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -281,14 +289,12 @@ if __name__ == "__main__":
         criterion = nn.BCEWithLogitsLoss()
         scheduler = CosineAnnealingLR(optimizer, T_max=config['num_epochs'] - config['warmup_epochs'])
 
-        # Create dummy dataset and loaders for this fold
         fold_dummy_dataset = DummyMultiViewDataset(
             num_samples=100,
             img_size=config['img_size'],
             num_views=config['num_views']
         )
         
-        # Simulate train/val split for the fold
         fold_train_size = int(0.8 * len(fold_dummy_dataset))
         fold_val_size = len(fold_dummy_dataset) - fold_train_size
         fold_train_subset, fold_val_subset = random_split(fold_dummy_dataset, [fold_train_size, fold_val_size])
@@ -296,11 +302,15 @@ if __name__ == "__main__":
         fold_train_loader = DataLoader(fold_train_subset, batch_size=config['batch_size'], shuffle=True, num_workers=config['num_workers'], pin_memory=True)
         fold_val_loader = DataLoader(fold_val_subset, batch_size=config['batch_size'], shuffle=False, num_workers=config['num_workers'], pin_memory=True)
 
-        fold_accuracy = train_and_evaluate_fold(
+        fold_accuracy, fold_metrics = train_and_evaluate_fold(
             fold_idx, model, optimizer, criterion, scheduler,
             fold_train_loader, fold_val_loader, config['num_epochs'], config['warmup_epochs'], config['device'], config['checkpoint_dir'], logger
         )
         results_data.append(fold_accuracy)
+        all_fold_metrics.append(fold_metrics) # New: Store all metrics
+
+    logger.info("\n--- Epoch Metrics Log ---")
+    logger.info(f"Metrics per fold: {str(all_fold_metrics)}")
 
     logger.info("\n--- Summary of Classification Accuracy (ACC) ---")
     
